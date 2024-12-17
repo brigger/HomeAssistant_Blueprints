@@ -1,6 +1,13 @@
 blueprint:
   name: Multi-Sonoff Button Multi-State Actions (Up to 3 Buttons)
-  description: Define actions for up to 3 Sonoff buttons with single press, double press, and long hold triggers.
+  description: 
+    "This Blueprint allows to easily program the different click options for the Sonoff button\n\n
+    \n\n
+    Usage:\n
+    - Up to three different buttons can be added, and they all perform the same action for the different clicks\n
+    - You can define the actions for a single clicke, double click and long hold action.\n"
+  
+  Define actions for up to 3 Sonoff buttons with single press, double press, and long hold triggers.
   domain: automation
   input:
     button_1_device:
