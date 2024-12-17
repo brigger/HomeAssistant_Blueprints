@@ -1,7 +1,6 @@
 blueprint:
   name: Multi-Sonoff Button Multi-State Actions (Up to 3 Buttons)
-  description: 
-    "This Blueprint allows to easily program the different click options for the Sonoff button SNZB-01P\n\n
+  description: "This Blueprint allows to easily program the different click options for the Sonoff button SNZB-01P\n\n
     \n\n
     Usage:\n
     - Up to three different buttons can be added, and they all perform the same action for the different clicks\n
