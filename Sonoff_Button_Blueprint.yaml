@@ -1,0 +1,81 @@
+blueprint:
+  name: Multi-Sonoff Button Multi-State Actions (Up to 3 Buttons)
+  description: Define actions for up to 3 Sonoff buttons with single press, double press, and long hold triggers.
+  domain: automation
+  input:
+    button_1_device:
+      name: Button 1 Device
+      description: The first Sonoff button to monitor (required).
+      selector:
+        device:
+          integration: zha
+    button_2_device:
+      name: Button 2 Device
+      description: The second Sonoff button to monitor (optional).
+      selector:
+        device:
+          integration: zha
+      default: ""
+    button_3_device:
+      name: Button 3 Device
+      description: The third Sonoff button to monitor (optional).
+      selector:
+        device:
+          integration: zha
+      default: ""
+    single_click_action:
+      name: Single Click Action
+      description: Action to perform on single press.
+      selector:
+        action: {}
+      default: []
+    double_click_action:
+      name: Double Click Action
+      description: Action to perform on double press.
+      selector:
+        action: {}
+      default: []
+    long_hold_action:
+      name: Long Hold Action
+      description: Action to perform on long hold.
+      selector:
+        action: {}
+      default: []
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input button_1_device
+
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input button_2_device
+    enabled: "{{ button_2_device != '' }}"
+
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input button_3_device
+    enabled: "{{ button_3_device != '' }}"
+
+action:
+  #- service: notify.persistent_notification
+  #  data:
+  #    message: >
+  #      Automation triggered by device: {{ trigger.event.data['device_id'] | default('Unknown Device ID') }}.
+  #      Command: {{ trigger.event.data['command'] | default('Unknown Command') }}.
+  #      Args: {{ trigger.event.data['args'] | default('No Args') }}.
+  #    title: "Sonoff Button Debug"
+
+  - choose:
+      - conditions:
+          - "{{ trigger.event.data['command'] == 'toggle' }}"
+        sequence: !input single_click_action
+      - conditions:
+          - "{{ trigger.event.data['command'] == 'on' }}"
+        sequence: !input double_click_action
+      - conditions:
+          - "{{ trigger.event.data['command'] == 'off' }}"
+        sequence: !input long_hold_action

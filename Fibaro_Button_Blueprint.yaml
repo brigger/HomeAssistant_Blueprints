@@ -1,0 +1,114 @@
+blueprint:
+  name: Fibaro Button Actions
+  description: >
+    Define actions for a Fibaro button for various events like KeyPressed, KeyHeldDown, KeyPressed2x, etc.
+  domain: automation
+  input:
+    fibaro_button:
+      name: Fibaro Button
+      description: Select your Fibaro button device.
+      selector:
+        device: {}
+
+    action_key_pressed:
+      name: Action for KeyPressed
+      description: Action to run when the button is pressed once.
+      default: []
+      selector:
+        action: {}
+
+    action_key_released:
+      name: Action for KeyReleased
+      description: Action to run when the button is released.
+      default: []
+      selector:
+        action: {}
+
+    action_key_held_down:
+      name: Action for KeyHeldDown
+      description: Action to run when the button is held down.
+      default: []
+      selector:
+        action: {}
+
+    action_key_pressed_2x:
+      name: Action for KeyPressed2x
+      description: Action to run when the button is pressed twice.
+      default: []
+      selector:
+        action: {}
+
+    action_key_pressed_3x:
+      name: Action for KeyPressed3x
+      description: Action to run when the button is pressed three times.
+      default: []
+      selector:
+        action: {}
+
+    action_key_pressed_4x:
+      name: Action for KeyPressed4x
+      description: Action to run when the button is pressed four times.
+      default: []
+      selector:
+        action: {}
+
+    action_key_pressed_5x:
+      name: Action for KeyPressed5x
+      description: Action to run when the button is pressed five times.
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input fibaro_button
+      command_class: 91
+      property: scene
+
+condition: []
+
+action:
+#  - service: persistent_notification.create
+#    data:
+#      title: Fibaro Button Event
+#      message: "Event data: {{ trigger.event.data }}"
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyPressed' }}"
+        sequence: !input action_key_pressed
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyReleased' }}"
+        sequence: !input action_key_released
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyHeldDown' }}"
+        sequence: !input action_key_held_down
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyPressed2x' }}"
+        sequence: !input action_key_pressed_2x
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyPressed3x' }}"
+        sequence: !input action_key_pressed_3x
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyPressed4x' }}"
+        sequence: !input action_key_pressed_4x
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.event.data.value == 'KeyPressed5x' }}"
+        sequence: !input action_key_pressed_5x
+
+    default: []
