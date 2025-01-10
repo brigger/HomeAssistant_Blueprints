@@ -12,20 +12,17 @@ blueprint:
       description: The first Sonoff button to monitor (required).
       selector:
         device:
-          integration: zha
     button_2_device:
       name: Button 2 Device
       description: The second Sonoff button to monitor (optional).
       selector:
         device:
-          integration: zha
       default: ""
     button_3_device:
       name: Button 3 Device
       description: The third Sonoff button to monitor (optional).
       selector:
         device:
-          integration: zha
       default: ""
     single_click_action:
       name: Single Click Action
