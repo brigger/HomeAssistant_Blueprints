@@ -1,7 +1,8 @@
 blueprint:
-  name: Sonoff Button Action Selector MQTT
+  name: Sonoff Button Action Selector MQTT (Two Buttons)
   description: >
-    This Blueprint allows you to select two Sonoff buttons (one is optional) and program actions for single click, double click, and long press events using MQTT.
+    This Blueprint allows you to select two Sonoff buttons and program actions for single click, double click, and long press events using MQTT.
+    If you only have one button, enter the same button device twice.
 
     Features:
     - Choose two button devices (second is optional) and define actions for each event type (single, double, long press).
@@ -65,13 +66,14 @@ trigger:
     subtype: long
     id: long_hold_1
 
-  # Trigger for Button 2 (Single, Double, Long)
+  # Trigger for Button 2 (Single, Double, Long) if provided
   - platform: device
     device_id: !input button_2_device
     domain: mqtt
     type: action
     subtype: single
     id: single_click_2
+    enabled: "{{ button_2_device != '' }}"
 
   - platform: device
     device_id: !input button_2_device
@@ -79,6 +81,7 @@ trigger:
     type: action
     subtype: double
     id: double_click_2
+    enabled: "{{ button_2_device != '' }}"
 
   - platform: device
     device_id: !input button_2_device
@@ -86,39 +89,44 @@ trigger:
     type: action
     subtype: long
     id: long_hold_2
+    enabled: "{{ button_2_device != '' }}"
 
 action:
   - choose:
-      # Actions for Button 1
+      # Action for Button 1 - Single Click
       - conditions:
           - condition: trigger
             id: single_click_1
         sequence: !input single_click_action
 
+      # Action for Button 1 - Double Click
       - conditions:
           - condition: trigger
             id: double_click_1
         sequence: !input double_click_action
 
+      # Action for Button 1 - Long Hold
       - conditions:
           - condition: trigger
             id: long_hold_1
         sequence: !input long_hold_action
 
-      # Actions for Button 2 (Only if button_2_device is not empty)
+      # Action for Button 2 - Single Click (only if Button 2 is provided)
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.id == 'single_click_2' and states['input_text.button_2_device'] != '' }}"
+          - condition: trigger
+            id: single_click_2
         sequence: !input single_click_action
 
+      # Action for Button 2 - Double Click (only if Button 2 is provided)
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.id == 'double_click_2' and states['input_text.button_2_device'] != '' }}"
+          - condition: trigger
+            id: double_click_2
         sequence: !input double_click_action
 
+      # Action for Button 2 - Long Hold (only if Button 2 is provided)
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.id == 'long_hold_2' and states['input_text.button_2_device'] != '' }}"
+          - condition: trigger
+            id: long_hold_2
         sequence: !input long_hold_action
 
 mode: single
