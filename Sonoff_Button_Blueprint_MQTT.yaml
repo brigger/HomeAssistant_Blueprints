@@ -1,5 +1,5 @@
 blueprint:
-  name: Sonoff Button Action Selector MQTT (Two Buttons)
+  name: Sonoff Button Action Selector MQTT
   description: >
     This Blueprint allows you to select two Sonoff buttons (one is optional) and program actions for single click, double click, and long press events using MQTT.
 
