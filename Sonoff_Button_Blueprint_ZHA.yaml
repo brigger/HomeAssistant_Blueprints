@@ -1,10 +1,12 @@
 blueprint:
-  name: Multi-Sonoff Button Multi-State Actions (Up to 3 Buttons)
+  name: Sonoff Button Actions (ZHA)(Up to 3 Buttons)
   description: "This Blueprint allows to easily program the different click options for the Sonoff button SNZB-01P\n\n
     \n\n
     Usage:\n
     - Up to three different buttons can be added, and they all perform the same action for the different clicks\n
-    - You can define the actions for a single clicke, double click and long hold action.\n"
+    - You can define the actions for a single clicke, double click and long hold action.\n
+    \n
+    \nThis automation is for ZHA integration."
   domain: automation
   input:
     button_1_device:
@@ -12,17 +14,20 @@ blueprint:
       description: The first Sonoff button to monitor (required).
       selector:
         device:
+          integration: zha
     button_2_device:
       name: Button 2 Device
       description: The second Sonoff button to monitor (optional).
       selector:
         device:
+          integration: zha
       default: ""
     button_3_device:
       name: Button 3 Device
       description: The third Sonoff button to monitor (optional).
       selector:
         device:
+          integration: zha
       default: ""
     single_click_action:
       name: Single Click Action

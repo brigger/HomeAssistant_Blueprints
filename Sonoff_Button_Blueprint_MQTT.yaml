@@ -1,0 +1,131 @@
+blueprint:
+  name: Sonoff Button Action Selector MQTT (Two Buttons)
+  description: >
+    This Blueprint allows you to select two Sonoff buttons (one is optional) and program actions for single click, double click, and long press events using MQTT.
+
+    Features:
+    - Choose two button devices (second is optional) and define actions for each event type (single, double, long press).
+    - Supports toggling lights, opening/closing covers, or other actions based on the click event.
+    
+    The implementation is for MQTT integration.
+  domain: automation
+  input:
+    button_1_device:
+      name: Button 1 Device
+      description: The first Sonoff button to monitor.
+      selector:
+        device:
+          integration: mqtt
+    button_2_device:
+      name: Button 2 Device (Optional)
+      description: The second Sonoff button to monitor (optional).
+      selector:
+        device:
+          integration: mqtt
+      default: ""
+    single_click_action:
+      name: Single Click Action
+      description: Action to perform on a single click.
+      selector:
+        action: {}
+      default: []
+    double_click_action:
+      name: Double Click Action
+      description: Action to perform on a double click.
+      selector:
+        action: {}
+      default: []
+    long_hold_action:
+      name: Long Hold Action
+      description: Action to perform on a long press.
+      selector:
+        action: {}
+      default: []
+
+trigger:
+  # Trigger for Button 1 (Single, Double, Long)
+  - platform: device
+    device_id: !input button_1_device
+    domain: mqtt
+    type: action
+    subtype: single
+    id: single_click_1
+
+  - platform: device
+    device_id: !input button_1_device
+    domain: mqtt
+    type: action
+    subtype: double
+    id: double_click_1
+
+  - platform: device
+    device_id: !input button_1_device
+    domain: mqtt
+    type: action
+    subtype: long
+    id: long_hold_1
+
+  # Trigger for Button 2 (Single, Double, Long) if provided
+  - platform: device
+    device_id: !input button_2_device
+    domain: mqtt
+    type: action
+    subtype: single
+    id: single_click_2
+    enabled: "{{ button_2_device != '' }}"
+
+  - platform: device
+    device_id: !input button_2_device
+    domain: mqtt
+    type: action
+    subtype: double
+    id: double_click_2
+    enabled: "{{ button_2_device != '' }}"
+
+  - platform: device
+    device_id: !input button_2_device
+    domain: mqtt
+    type: action
+    subtype: long
+    id: long_hold_2
+    enabled: "{{ button_2_device != '' }}"
+
+action:
+  - choose:
+      # Action for Button 1 - Single Click
+      - conditions:
+          - condition: trigger
+            id: single_click_1
+        sequence: !input single_click_action
+
+      # Action for Button 1 - Double Click
+      - conditions:
+          - condition: trigger
+            id: double_click_1
+        sequence: !input double_click_action
+
+      # Action for Button 1 - Long Hold
+      - conditions:
+          - condition: trigger
+            id: long_hold_1
+        sequence: !input long_hold_action
+
+      # Action for Button 2 - Single Click (only if Button 2 is provided)
+      - conditions:
+          - condition: trigger
+            id: single_click_2
+        sequence: !input single_click_action
+
+      # Action for Button 2 - Double Click (only if Button 2 is provided)
+      - conditions:
+          - condition: trigger
+            id: double_click_2
+        sequence: !input double_click_action
+
+      # Action for Button 2 - Long Hold (only if Button 2 is provided)
+      - conditions:
+          - condition: trigger
+            id: long_hold_2
+        sequence: !input long_hold_action
+
+mode: single
