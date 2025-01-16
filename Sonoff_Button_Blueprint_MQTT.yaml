@@ -5,7 +5,7 @@ blueprint:
 
     Features:
     - Choose two button devices (second is optional) and define actions for each event type (single, double, long press).
-    - Supports toggling lights, opening/closing covers, or other actions based on the click event.
+    - Supports toggling lights, opening/closing covers, or other actions based on the click event. 
     
     The implementation is for MQTT integration.
   domain: automation
